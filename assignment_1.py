@@ -39,27 +39,37 @@ import csv
 #                 i+=1
 
 #Part C and D
-with open('output/data2.xlsx','r') as part_b:
-    reader=csv.reader(part_b)
-    first=True
-    with open('output/data3.xlsx','w') as part_c:
-        writer=csv.writer(part_c)
-        for row in reader:
-            if first:
-                first=False
-                writer.writerow((row[0],row[1],row[2],row[3],row[4],"specifications_text"))
-                continue
-            else:
-                try:
-                    specifications=row[5].split(',')
-                    for i in specifications:
-                        if "specifications" in i:
-                            writer.writerow((row[0],row[1],row[2],row[3],row[4],i))
-                            break
+# with open('output/data2.xlsx','r') as part_b:
+#     reader=csv.reader(part_b)
+#     first=True
+#     with open('output/data3.xlsx','w') as part_c:
+#         writer=csv.writer(part_c)
+#         for row in reader:
+#             if first:
+#                 first=False
+#                 writer.writerow((row[0],row[1],row[2],row[3],row[4],"specifications_text"))
+#                 continue
+#             else:
+#                 try:
+#                     specifications=row[5].split(',')
+#                     for i in specifications:
+#                         if "specifications" in i:
+#                             writer.writerow((row[0],row[1],row[2],row[3],row[4],i))
+#                             break
                     
-                except:
-                    print("expection occured")
+#                 except:
+#                     print("expection occured")
 
-
-       
+#Part E
+all_rows=[]
+with open("output/data3.xlsx",'r') as part_e:
+    reader=csv.reader(part_e)
+    for row in reader:
+        all_rows.append(row)
+with open("output/data3.xlsx",'w') as part_e:
+    writer=csv.writer(part_e)
+    for row in all_rows:
+        if "PO Order" not in row:
+            writer.writerow(row)
+            
             
