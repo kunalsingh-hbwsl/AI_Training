@@ -1,5 +1,22 @@
 import csv
-# Part a
+from lxml import html
+
+def parse_the_html(i:str):
+    #specifications removed
+    a=i[16:]
+    tree = html.fromstring(f"<table>{a}</table>")
+    rows = tree.xpath("//tr")
+
+    table_data = {}
+    for row in rows:
+        key = row.xpath("./th/text()")[0].strip()
+        value = row.xpath("./td/text()")[0].strip()
+
+        table_data[key] = value
+
+    return str(table_data)
+
+# Part a you can use pandas
 # with open('/home/kunalsingh/Downloads/export_catalog_product_20251006_105554.csv', 'r') as file:
 #     reader = csv.reader(file)
 #     headers_to_include = ["sku","name", "short_description", "description", "categories", "additional_attributes"]
@@ -17,7 +34,7 @@ import csv
 #         for row in reader:
 #            writer.writerow((row[0],row[4],row[6],row[7],row[8],row[46]))
 
-#Part B  
+# #Part B  
 # with open('output/data1.xlsx','r') as excel_output:
 #     reader =csv.reader(excel_output)
 #     i=0
@@ -39,26 +56,27 @@ import csv
 #                 i+=1
 
 #Part C and D
-# with open('output/data2.xlsx','r') as part_b:
-#     reader=csv.reader(part_b)
-#     first=True
-#     with open('output/data3.xlsx','w') as part_c:
-#         writer=csv.writer(part_c)
-#         for row in reader:
-#             if first:
-#                 first=False
-#                 writer.writerow((row[0],row[1],row[2],row[3],row[4],"specifications_text"))
-#                 continue
-#             else:
-#                 try:
-#                     specifications=row[5].split(',')
-#                     for i in specifications:
-#                         if "specifications" in i:
-#                             writer.writerow((row[0],row[1],row[2],row[3],row[4],i))
-#                             break
+with open('output/data2.xlsx','r') as part_b:
+    reader=csv.reader(part_b)
+    first=True
+    with open('output/data3.xlsx','w') as part_c:
+        writer=csv.writer(part_c)
+        for row in reader:
+            if first:
+                first=False
+                writer.writerow((row[0],row[1],row[2],row[3],row[4],"specifications_text"))
+                continue
+            else:
+                try:
+                    specifications=row[5].split(',')
+                    for i in specifications:
+                        if "specifications" in i:
+                            res=parse_the_html(i)
+                            writer.writerow((row[0],row[1],row[2],row[3],row[4],res))
+                            break
                     
-#                 except:
-#                     print("expection occured")
+                except:
+                    print("expection occured")
 
 #Part E
 all_rows=[]
